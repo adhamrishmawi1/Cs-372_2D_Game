@@ -1,1 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drugs</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #gameOver, #scoreDisplay {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            color: white;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        #gameOver { top: 50%; display: none; }
+        #scoreDisplay { top: 0; }
+        #retryButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #d10a7e;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="gameOver">
+    Game Over
+    <div id="retryButton" onclick="resetGame()">Retry</div>
+</div>
+<div id="scoreDisplay">Score: 0</div>
+
+<!-- Load Three.js Core Library First -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.130.1/build/three.min.js"></script>
+<!-- Load GLTFLoader -->
+<script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+<!-- Load FBXLoader (if you need to load FBX models, include this) -->
+<script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/FBXLoader.js"></script>
+<script>
+    let scene, camera, renderer, player, gameOverScreen, scoreDisplay;
+    let enemies = [];
+    let gameRunning = true, score = 0, scoreInterval;
+    let level = 1, enemySpeed = 0.0002;
+
+    const gltfLoader = new THREE.GLTFLoader();
+    const fbxLoader = new THREE.FBXLoader();
+
+    const rainbowShader = {
+        uniforms: { time: { value: 1.0 } },
+        vertexShader: `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform float time;
+            varying vec2 vUv;
+            void main() {
+                vec2 uv = vUv;
+                float r = 0.5 + 0.5 * cos(3.0 * uv.x + time);
+                float g = 0.5 + 0.5 * sin(3.0 * uv.y + time);
+                float b = 0.5 + 0.5 * sin(time);
+                gl_FragColor = vec4(r, g, b, 1.0);
+            }
+        `
+    };
+    let mixer;
+    function init() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Lighting
+    
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(0, 1, 1); // Adjust the position as needed
+    scene.add(directionalLight);
+
+    // Dynamic rainbow background
+    const backgroundGeometry = new THREE.PlaneGeometry(100, 100);
+    const backgroundMaterial = new THREE.ShaderMaterial(rainbowShader);
+    const background = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+    background.position.z = -10;
+    scene.add(background);
+
+    // Load the player model (crocodile)
+    gltfLoader.load('models/nile_crocodile_swimming.glb', function(gltf) {
+        player = gltf.scene;
+        player.scale.set(0.4, 0.4, 0.4); // Scale the player model
+        player.position.set(0, 0, 0); // Set the player's initial position
+        scene.add(player);
+
+        // Animation Mixer for the player
+        mixer = new THREE.AnimationMixer(player);
+
+        // Play the first animation if available
+        if (gltf.animations && gltf.animations.length) {
+        // This example will only play the first animation
+        const animationClip = gltf.animations[0];
+        const action = mixer.clipAction(Swim);
+        action.play();
+    }
+    // Initialize enemies after the player is loaded
+    for (let i = 0; i < 5; i++) {
+            createEnemy();
+        }
+    });
+
+    camera.position.z = 5;
+    gameOverScreen = document.getElementById('gameOver');
+    scoreDisplay = document.getElementById('scoreDisplay');
+    document.getElementById('retryButton').addEventListener('click', resetGame);
+    document.addEventListener('keydown', onDocumentKeyDown, false);
+
+    startScoreCounter();
+    animate();
+}
+
+// Create enemy function
+function createEnemy() {
+    // Load the enemy model (drug)
+    gltfLoader.load('models/drugs.glb', function(gltf) {
+        const enemy = gltf.scene;
+        enemy.scale.set(0.3, 0.3, 0.3);
+        // You can now safely call resetEnemyPosition because the player is already loaded
+        resetEnemyPosition(enemy);
+        scene.add(enemy);
+        enemies.push(enemy);
+    });
+}
+
+ // Adjust enemy position function
+function resetEnemyPosition(enemy) {
+    // Ensure player is defined before accessing its properties
+    if (player && player.position) {
+        let position;
+        do {
+            position = new THREE.Vector3((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10, 0);
+        } while (position.distanceTo(player.position) < 2);
+        enemy.position.copy(position);
+    }
+}
+
+
+    function resetGame() {
+        gameRunning = true;
+        level = 1;
+        score = 0;
+        scoreDisplay.innerText = 'Score: 0';
+        gameOverScreen.style.display = 'none';
+        player.position.set(0, 0, 0);
+        player.rotation.set(0, 0, 0);
+        enemies.forEach(enemy => scene.remove(enemy));
+        enemies = [];
+        for (let i = 0; i < 5; i++) createEnemy(); // Reset to initial enemy count
+        animate();
+    }
+
+    function onDocumentKeyDown(event) {
+        if (!gameRunning) return;
+        const rotationSpeed = Math.PI / 18;
+        switch(event.keyCode) {
+            case 37: // Left arrow key
+                player.rotation.z += rotationSpeed;
+                break;
+            case 39: // Right arrow key
+                player.rotation.z -= rotationSpeed;
+                break;
+            case 38: // Up arrow key
+                player.position.x += 0.1 * Math.cos(player.rotation.z);
+                player.position.y += 0.1 * Math.sin(player.rotation.z);
+                break;
+            case 40: // Down arrow key
+                player.position.x -= 0.05 * Math.cos(player.rotation.z);
+                player.position.y -= 0.05 * Math.sin(player.rotation.z);
+                break;
+        }
+    }
+
+    function startScoreCounter() {
+        scoreInterval = setInterval(() => {
+            if (!gameRunning) return;
+            score++;
+            scoreDisplay.innerText = 'Score: ' + score;
+            if (score % 20 === 0) {
+                level++;
+                enemySpeed += 0.01; // Increase enemy speed
+                createEnemy(); // Add a new enemy for the next level
+            }
+        }, 1000);
+    }
+
+    function animate() {
+        if (!gameRunning) return;
+
+        
+    
+        
+    
+        requestAnimationFrame(animate);
+        rainbowShader.uniforms.time.value += 0.02; // Update time for rainbow effect
+        
+        enemies.forEach(enemy => {
+            // Move towards the player's position
+            const direction = player.position.clone().sub(enemy.position).normalize();
+            enemy.position.add(direction.multiplyScalar(enemySpeed));
+
+            // Apply jitter
+            enemy.position.x += (Math.random() - 0.5) * 0.2;
+            enemy.position.y += (Math.random() - 0.5) * 0.2;
+        });
+
+        checkCollisions(); // Check for collisions between the player and enemies
+        renderer.render(scene, camera);
+    }
+
+    function checkCollisions() {
+        enemies.forEach(enemy => {
+            if (enemy.position.distanceTo(player.position) < 0.75) { // Check for collision
+                gameOverScreen.style.display = 'block';
+                gameRunning = false;
+                clearInterval(scoreInterval);
+            }
+        });
+    }
+
+    init();
+</script>
+</body>
+</html>
 
