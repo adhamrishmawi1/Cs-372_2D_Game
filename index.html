@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One and Two</title>
+    <style>
+        body { margin: 0; }
 
+        #overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            opacity: 0.2;
+            font-family: Consolas, monaco, monospace;
+            font-size: 40px;
+            user-select: none;
+        }
+
+        #overlay2 {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            opacity: 0.2;
+            font-family: Consolas, monaco, monospace;
+            font-size: 30px;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- <div id="overlay">Score: 0</div> -->
+    <div id="overlay2">Use arrow keys and WASD</div>
+
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+          }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    <script type="module" src="./main.js"></script>
+
+</body>
+</html>
