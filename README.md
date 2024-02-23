@@ -43,7 +43,7 @@ If you're interested in exploring or modifying the game's code, here are the ste
 
 1. Ensure you have a modern web browser installed (e.g., Chrome, Firefox, Safari).
 2. Clone the repository to your local machine.
-3. Open the `index.html` file in your browser to view or test changes.
+3. Run `python -m http.server` in root dir and then goto localhost:8000
 
 ## Contributing
 
