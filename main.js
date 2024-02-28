@@ -23,17 +23,19 @@ var hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.5);
 scene.add(hemisphereLight);
 
 // Init Physics
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    Runner = Matter.Runner,
+    Bodies = Matter.Bodies,
+    Composite = Matter.Composite;
 
+var engine = Engine.create();
 
 // Add Player
 const p1Geometry = new THREE.SphereGeometry(0.5, 32, 32);
 const p1Material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 const p1 = new THREE.Mesh(p1Geometry, p1Material);
-const ballShape = new CANNON.Sphere(0.5);
-p1.userData.physicsBody = new CANNON.Body({ mass: 1 });
-p1.userData.physicsBody.addShape(ballShape);
-p1.userData.physicsBody.position.set(0, 0, 0);
-world.addBody(p1.userData.physicsBody);
+p1.userData.physicsBody = Bodies.rectangle(0, 0, 80, 80);
 physObjs.push(p1);
 scene.add(p1);
 
