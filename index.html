@@ -33,16 +33,53 @@
             position: absolute;
             bottom: 10px;
             left: 10px;
-            color: white;
+            color: red;
             opacity: 0.2;
             font-family: Consolas, monaco, monospace;
             font-size: 30px;
             user-select: none;
         }
+
+        #gameTitle {
+            font-size: 70px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            background-image: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
+            -webkit-background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: rainbowAnimation 3s linear infinite, pulse 1.5s infinite alternate;
+        }
+
+        #credits {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 22px;
+            color: Red; /* Ensure the text is visible */
+            transform-origin: top right;
+        }
+
+
+        @keyframes rainbowAnimation {
+            0% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
+        }
     </style>
 </head>
 <body>
-
+    <a href="https://github.com/adhamrishmawi1/Cs-372_2d_platformer/tree/main" target="_blank">
+        <img src="PNG/Github.png" alt="GitHub Logo" style="width:50px; height:auto;">
+    </a>
+    
+    <div id="credits">CREATED BY: Benny and Adham</div>
+    <div id="gameTitle">PUSH HIM OFF</div>
     <div id="overlayA">0</div>
     <div id="overlayB">0</div>
     <div id="overlayC">Use arrows+P and WASD+B to control the players</div>
