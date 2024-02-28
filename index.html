@@ -7,18 +7,29 @@
     <style>
         body { margin: 0; }
 
-        #overlay {
+        #overlayA {
             position: absolute;
             top: 10px;
-            left: 10px;
-            color: white;
-            opacity: 0.2;
+            right: 10px;
+            color: RED;
+            opacity: 0.5;
             font-family: Consolas, monaco, monospace;
             font-size: 40px;
             user-select: none;
         }
 
-        #overlay2 {
+        #overlayB {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: BlUE;
+            opacity: 0.5;
+            font-family: Consolas, monaco, monospace;
+            font-size: 40px;
+            user-select: none;
+        }
+
+        #overlayC {
             position: absolute;
             bottom: 10px;
             left: 10px;
@@ -32,8 +43,9 @@
 </head>
 <body>
 
-    <!-- <div id="overlay">Score: 0</div> -->
-    <div id="overlay2">Use arrows+P and WASD+B to control the players</div>
+    <div id="overlayA">0</div>
+    <div id="overlayB">0</div>
+    <div id="overlayC">Use arrows+P and WASD+B to control the players</div>
 
     <script type="importmap">
         {
