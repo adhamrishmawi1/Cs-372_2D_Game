@@ -2,11 +2,11 @@
 
 ## Introduction
 
-This is a simple 2D cooperative platformer game developed as a project for CS-372 at Calvin University. It is built using Three.js, a cross-browser JavaScript library/API used to create and display animated 3D computer graphics in a web browser. This game is designed to be played by two players on the same device, offering a single-level cooperative gameplay experience.
+This is an engaging 2D duel platformer game developed as a project for CS-372 at Calvin University. Utilizing Three.js, a versatile JavaScript library/API for rendering animated 3D graphics in web browsers, this game offers a competitive gameplay experience. Designed for two players on the same device, it pits them against each other in a battle of wits and agility, with the objective of pushing the opponent off the platform to secure victory.
 
 ## Game Overview
 
-- **Genre**: 2D Platformer
+- **Genre**: 2D arcade game
 - **Players**: 2 (Cooperative, playing on the same device)
 - **Level**: 1 (Single level design for simplicity)
 - **Platform**: Web (Compatible with most modern web browsers)
@@ -14,8 +14,8 @@ This is a simple 2D cooperative platformer game developed as a project for CS-37
 
 ## Features
 
-- Single interactive level with platforming challenges.
-- Cooperative gameplay where two players work together to complete the level.
+- Single platform level
+- 1v1 gameplay where two players work to push each other off.
 - Simple control scheme for ease of play.
 - Basic physics and collision detection.
 
@@ -29,13 +29,15 @@ No installation required! To play the game, simply open the provided `index.html
   - Move Left: `A`
   - Move Right: `D`
   - Jump: `W`
+  - Action: `right shift`
 
 - **Player 2 Controls**:
   - Move Left: `Left Arrow Key`
   - Move Right: `Right Arrow Key`
   - Jump: `Up Arrow Key`
+  - Action: `left shift`
 
-Work together to navigate through the level and reach the endpoint. Cooperation is key!
+Cooperation is not key!
 
 ## Development Setup
 
