@@ -9,7 +9,7 @@
 
         #overlayA {
             position: absolute;
-            top: 10px;
+            top: 50%;
             right: 10px;
             color: RED;
             opacity: 0.5;
@@ -20,7 +20,7 @@
 
         #overlayB {
             position: absolute;
-            top: 10px;
+            top: 50%;
             left: 10px;
             color: BlUE;
             opacity: 0.5;
@@ -45,11 +45,16 @@
             font-weight: bold;
             text-align: center;
             margin: 20px 0;
+            top: 50px;
+            right: 30%;
+            transform: translateX(40%);
             background-image: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
             -webkit-background-clip: text;
             color: transparent;
             background-size: 200% auto;
+            font-family: Consolas, monaco, monospace;
             animation: rainbowAnimation 3s linear infinite, pulse 1.5s infinite alternate;
+            position: absolute;
         }
 
         #credits {
@@ -59,6 +64,7 @@
             font-size: 22px;
             color: Red; /* Ensure the text is visible */
             transform-origin: top right;
+            font-family: Consolas, monaco, monospace;
         }
 
 
@@ -75,7 +81,7 @@
 </head>
 <body>
     <a href="https://github.com/adhamrishmawi1/Cs-372_2d_platformer/tree/main" target="_blank">
-        <img src="PNG/Github.png" alt="GitHub Logo" style="width:50px; height:auto;">
+        <img src="PNG/Github.png" alt="GitHub Logo" style="width:50px; height:auto; position: absolute;">
     </a>
     
     <div id="credits">CREATED BY: Benny and Adham</div>
