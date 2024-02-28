@@ -29,13 +29,13 @@ No installation required! To play the game, simply open the provided `index.html
   - Move Left: `A`
   - Move Right: `D`
   - Jump: `W`
-  - Action: `right shift`
+  - Action: `B`
 
 - **Player 2 Controls**:
   - Move Left: `Left Arrow Key`
   - Move Right: `Right Arrow Key`
   - Jump: `Up Arrow Key`
-  - Action: `left shift`
+  - Action: `P`
 
 Cooperation is not key!
 
