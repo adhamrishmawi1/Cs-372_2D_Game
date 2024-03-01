@@ -1,12 +1,14 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 0, -15);
 camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.shadowMap.enabled = true;
+renderer.setClearColor(0x000000, 0);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -40,12 +42,14 @@ ground.receiveShadow = true;
 physObjs.push(ground);
 scene.add(ground);
 
-// Add Player
+// Add Players
 const options = {
     inertia: Infinity,
     friction: 0.01,
     frictionAir: 0.1
 }
+
+const loader = new GLTFLoader();
 
 const p1Geometry = new THREE.BoxGeometry(1, 2, 1);
 const p1Material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
