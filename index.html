@@ -87,6 +87,11 @@
     </style>
 </head>
 <body>
+    <audio id="backgroundAudio" autoplay loop>
+        <source src="audio/Main Theme - Super Smash Bros_ Brawl.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
     <a href="https://github.com/adhamrishmawi1/Cs-372_2d_platformer/tree/main" target="_blank">
         <img src="PNG/Github.png" alt="GitHub Logo" style="width:50px; height:auto; top: 10px; left: 10px; position: absolute;">
     </a>
@@ -96,6 +101,24 @@
     <div id="overlayA">0</div>
     <div id="overlayB">0</div>
     <div id="overlayC">Use arrows and WASD to control the players</div>
+
+    <script>
+        var audio = document.getElementById('backgroundAudio');
+        // Attempt to play the audio on page load
+        audio.play().catch(function(error) {
+            console.log("Audio play failed on initial attempt due to browser restrictions. Awaiting user interaction.");
+            audio.muted = true; // Mute the audio to ensure autoplay is possible
+        });
+    
+        // Listen for a click anywhere on the page to unmute and play the audio
+        document.addEventListener('click', function() {
+            if (audio.muted) {
+                audio.muted = false;
+                audio.play(); // Attempt to play the audio again
+            }
+        });
+    </script>
+</body>
 
     <script type="importmap">
         {
