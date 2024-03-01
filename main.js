@@ -38,6 +38,7 @@ const gGeometry = new THREE.BoxGeometry(20, 1, 5);
 const gMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 const ground = new THREE.Mesh(gGeometry, gMaterial);
 ground.userData.physicsBody = Bodies.rectangle(0, 5, 20, 1, { isStatic: true });
+ground.userData.offset = 0;
 ground.receiveShadow = true;
 physObjs.push(ground);
 scene.add(ground);
@@ -51,27 +52,53 @@ const options = {
 
 const loader = new GLTFLoader();
 
-const p1Geometry = new THREE.BoxGeometry(1, 2, 1);
-const p1Material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-const p1 = new THREE.Mesh(p1Geometry, p1Material);
-p1.userData.physicsBody = Bodies.rectangle(-3, 0, 1, 2, options);
-p1.castShadow = true;
+var p1, mixer1, action1;
+var phys1 = Bodies.rectangle(-3, 0, 0.8, 2.6, options);
 var p1dir = { x: 0, y: 0 };
-var phys1 = p1.userData.physicsBody;
-physObjs.push(p1);
-scene.add(p1);
 
-const p2Geometry = new THREE.BoxGeometry(1, 2, 1);
-const p2Material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
-const p2 = new THREE.Mesh(p2Geometry, p2Material);
-p2.userData.physicsBody = Bodies.rectangle(3, 0, 1, 2, options);
-p2.castShadow = true;
+var p2, mixer2, action2;
+var phys2 = Bodies.rectangle(3, 0, 0.7, 3.0, options);
 var p2dir = { x: 0, y: 0 };
-var phys2 = p2.userData.physicsBody;
-physObjs.push(p2);
-scene.add(p2);
 
-Composite.add(engine.world, physObjs.map(o => o.userData.physicsBody));
+loader.load(
+    './Model/taryk/scene.gltf',
+    function ( gltf1 ) {
+        p1 = gltf1.scene;
+        p1.castShadow = true;
+        p1.userData.physicsBody = phys1;
+        p1.userData.offset = 1.4;
+        p1.rotation.y = Math.PI / 2;
+        physObjs.push(p1);
+        scene.add(p1);
+
+        console.log(gltf1.animations);
+
+        mixer1 = new THREE.AnimationMixer( p1 );
+        action1 = mixer1.clipAction( gltf1.animations[1] );
+        action1.setLoop(THREE.LoopRepeat);
+        action1.play();
+
+        loader.load(
+            './Model/granny.glb',
+            function ( gltf2 ) {
+                p2 = gltf2.scene;
+                p2.castShadow = true;
+                p2.userData.physicsBody = phys2;
+                p2.userData.offset = 1.5;
+                p2.rotation.y = -Math.PI / 2;
+                physObjs.push(p2);
+                scene.add(p2);
+        
+                mixer2 = new THREE.AnimationMixer( p2 );
+                action2 = mixer2.clipAction( gltf2.animations[0] );
+                action2.setLoop(THREE.LoopRepeat);
+                action2.play();
+        
+                Composite.add(engine.world, physObjs.map(o => o.userData.physicsBody));
+            }
+        );
+    }
+);
 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -133,12 +160,15 @@ function animate() {
     Matter.Body.applyForce(phys1, phys1.position, p1dir);
     Matter.Body.applyForce(phys2, phys2.position, p2dir);
 
+    mixer1.update( 1 / 30 );
+    mixer2.update( 1 / 30 );
+
     // Update physics
     Engine.update(engine, 1.5);
 
     physObjs.forEach((o, index) => {
         o.position.x = o.userData.physicsBody.position.x;
-        o.position.y = -o.userData.physicsBody.position.y;
+        o.position.y = -o.userData.physicsBody.position.y - o.userData.offset;
         //o.rotation.z = o.userData.physicsBody.angle;
     });
 
