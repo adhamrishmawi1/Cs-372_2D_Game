@@ -12,9 +12,9 @@
             top: 50%;
             right: 10px;
             color: RED;
-            opacity: 0.5;
+            opacity: 0.8;
             font-family: Consolas, monaco, monospace;
-            font-size: 40px;
+            font-size: 60px;
             user-select: none;
         }
 
@@ -23,9 +23,9 @@
             top: 50%;
             left: 10px;
             color: BlUE;
-            opacity: 0.5;
+            opacity: 0.8;
             font-family: Consolas, monaco, monospace;
-            font-size: 40px;
+            font-size: 60px;
             user-select: none;
         }
 
@@ -33,28 +33,29 @@
             position: absolute;
             bottom: 10px;
             left: 10px;
-            color: red;
-            opacity: 0.2;
+            color: white;
+            opacity: 0.5;
             font-family: Consolas, monaco, monospace;
             font-size: 30px;
             user-select: none;
         }
 
         #gameTitle {
+            
+            position: absolute;
+            display: inline-block;
+            top: 50px;
+            right: 50%;
+            transform: translateX(50%);
             font-size: 70px;
             font-weight: bold;
             text-align: center;
-            margin: 20px 0;
-            top: 50px;
-            right: 30%;
-            transform: translateX(40%);
             background-image: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
             -webkit-background-clip: text;
             color: transparent;
             background-size: 200% auto;
             font-family: Consolas, monaco, monospace;
             animation: rainbowAnimation 3s linear infinite, pulse 1.5s infinite alternate;
-            position: absolute;
         }
 
         #credits {
@@ -74,8 +75,8 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.2); }
+            0% { transform: translateX(50%) scale(1); }
+            100% { transform: translateX(50%) scale(1.2); }
         }
     </style>
 </head>
